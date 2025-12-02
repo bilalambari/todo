@@ -1,0 +1,5 @@
+{
+  "name": "TaskFlow Workspace",
+  "description": "A comprehensive project management workspace featuring Projects, Tasks, and Team management with Kanban, Grid, and Calendar views.",
+  "requestFramePermissions": []
+}
