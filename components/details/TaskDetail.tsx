@@ -10,6 +10,7 @@ import { ArrowLeft, Save, Trash2, X, Calendar, User, Tag, Paperclip, CheckSquare
 
 const JFANS_CHECKLIST = [
     "Cek Perhitungan Utilization rate harus Benar",
+    "Pastikan History Masa sewa fasilitas telah di masukan",
     "Pastikan luasan SAMA bangunan existing fasilitas (renewal) Pada tabel JFANS",
     "Pastikan kandidat yg terdapat di PpT masuk semua k Survey report JFANS",
     "Bila Relokasi Tanyakan apakah ada Renovasi di Gudang Existing sebelumnya",
@@ -20,7 +21,9 @@ const JFANS_CHECKLIST = [
     "Profile Data & Photo Existing fasilitas harus ada Maps jg",
     "Data & Photo kandidat fasilitas relokasi harus ada & Maps Jarak dengan lokasi existing.",
     "Setiap relokasi Wajib memberikan Maps Jarak antar lokasi existing Dan yg baru",
-    "Bila di butuhkan bisa dikasih data tambahan P&L dll"
+    "Bila di butuhkan bisa dikasih data tambahan P&L dll",
+    "Apakah Sudah di Upload ke JFANS? (Centang bila Sudah)"
+
 ];
 
 export const TaskDetail: React.FC = () => {
