@@ -10,7 +10,7 @@ import { ArrowLeft, Save, Trash2, X, Calendar, User, Tag, Paperclip, CheckSquare
 
 const JFANS_CHECKLIST = [
     "Cek Perhitungan Utilization rate harus Benar",
-    "Pastikan History Masa sewa fasilitas telah di masukan",
+    "Pastikan History Masa sewa fasilitas telah di masukan pada JFANS",
     "Pastikan luasan SAMA bangunan existing fasilitas (renewal) Pada tabel JFANS",
     "Pastikan kandidat yg terdapat di PpT masuk semua k Survey report JFANS",
     "Bila Relokasi Tanyakan apakah ada Renovasi di Gudang Existing sebelumnya",
@@ -18,7 +18,7 @@ const JFANS_CHECKLIST = [
     "Jika terdapat hasil negosiasi angka sebelum nya dicantumkan agar Pak Jojo Tau. SS Chat Gpp",
     "Data shipment + (pastikan sesuai dengan fungsi)",
     "Data man power, kendaraan, jumlah karyawan + (pastikan sesuai dengan fungsi)",
-    "Profile Data & Photo Existing fasilitas harus ada Maps jg",
+    "Profile Data & Photo Existing fasilitas harus ada Maps yang valid",
     "Data & Photo kandidat fasilitas relokasi harus ada & Maps Jarak dengan lokasi existing.",
     "Setiap relokasi Wajib memberikan Maps Jarak antar lokasi existing Dan yg baru",
     "Bila di butuhkan bisa dikasih data tambahan P&L dll",
