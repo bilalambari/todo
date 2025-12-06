@@ -13,7 +13,7 @@ Ini akan menghasilkan folder `dist` yang berisi file production-ready.
 
 ### 2. Upload File ke Server
 
-Upload **SEMUA** file berikut ke `/www/wwwroot/todo.ambaritek.com`:
+Upload **SEMUA** file berikut ke `/www/wwwroot/list.ambaritek.com`:
 - Folder `dist/` (hasil build)
 - File `package.json`
 - File `package-lock.json`
@@ -25,7 +25,7 @@ Upload **SEMUA** file berikut ke `/www/wwwroot/todo.ambaritek.com`:
 #### A. Jika Menggunakan Static Site (Recommended):
 
 1. **Buka Website Settings** → **Site Directory**
-2. Set **Running Directory** ke: `/www/wwwroot/todo.ambaritek.com/dist`
+2. Set **Running Directory** ke: `/www/wwwroot/list.ambaritek.com/dist`
 3. **Enable** "Enable Prevent Cross-site Access"
 4. **Save**
 
@@ -45,13 +45,13 @@ location / {
 
 1. **Install dependencies di server:**
 ```bash
-cd /www/wwwroot/todo.ambaritek.com
+cd /www/wwwroot/list.ambaritek.com
 npm install
 npm run build
 ```
 
 2. **Konfigurasi Node Project di aaPanel:**
-   - **Path**: `/www/wwwroot/todo.ambaritek.com`
+   - **Path**: `/www/wwwroot/list.ambaritek.com`
    - **Name**: `todo`
    - **Run opt**: `Custom Command` (bukan dev!)
    - **Custom Start Command**: `npx vite preview --host 0.0.0.0 --port 3000`
@@ -90,7 +90,7 @@ Jika masih ada error redirect:
 ### 5. Verifikasi
 
 1. Buka browser (Incognito mode)
-2. Akses: `http://todo.ambaritek.com` atau `https://todo.ambaritek.com`
+2. Akses: `http://list.ambaritek.com` atau `https://list.ambaritek.com`
 3. Aplikasi seharusnya berjalan dengan baik
 
 ### 6. Monitoring
@@ -108,7 +108,13 @@ Untuk update otomatis yang stabil:
 3. **Copy-Paste** isi file `aapanel_deploy.sh` ke dalam kotak script.
 4. Klik **Save**.
 5. Klik **Manual Exec** sekali untuk memastikan build pertama berhasil.
-6. Pastikan (di Website Settings -> Site Directory), Running Directory mengarah ke `/www/wwwroot/todo.ambaritek.com/dist`.
+6. **CRITICAL CONFIGURATION**:
+    - Buka **Website Settings** -> **Site Directory**.
+    - **Site Directory**: Harus mengarah ke folder utama (misal: `/www/wwwroot/list.ambaritek.com`). **JANGAN** arahkan ke `/dist` di sini!
+    - **Running Directory**: Pilih `/dist`.
+    - Klik **Save**.
+    
+    *Penjelasan: Git Manager butuh akses ke folder `.git` di root, sedangkan web server butuh akses ke `/dist`. Konfigurasi ini memisahkan keduanya dengan benar.*
 
 Dengan cara ini, setiap kali Anda push ke Git, Webhook akan otomatis menjalankan `npm run build` dan website akan terupdate.
 
