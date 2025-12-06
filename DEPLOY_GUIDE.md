@@ -99,19 +99,20 @@ Jika masih ada error redirect:
 - **Website Log**: Lihat di Website Settings → Website log
 - **Service Status**: Pastikan status "Running" (hijau)
 
-## Rekomendasi:
+## Rekomendasi Deployment (Cara Paling Mudah)
 
-**Gunakan metode Static Site (Option A)** karena:
-- Lebih cepat dan efisien
-- Tidak perlu Node.js running terus-menerus
-- Lebih stabil untuk production
-- Hemat resource server
+Untuk update otomatis yang stabil:
 
-Aplikasi Vite/React ini adalah **SPA (Single Page Application)** yang tidak memerlukan server Node.js untuk production. Cukup build sekali dan serve sebagai static files.
+1. **Commit & Push** perubahan ini ke repository git Anda.
+2. Di **aaPanel**, buka **Git Manager** -> **Script**.
+3. **Copy-Paste** isi file `aapanel_deploy.sh` ke dalam kotak script.
+4. Klik **Save**.
+5. Klik **Manual Exec** sekali untuk memastikan build pertama berhasil.
+6. Pastikan (di Website Settings -> Site Directory), Running Directory mengarah ke `/www/wwwroot/todo.ambaritek.com/dist`.
+
+Dengan cara ini, setiap kali Anda push ke Git, Webhook akan otomatis menjalankan `npm run build` dan website akan terupdate.
 
 ## Catatan Penting:
-
 - **JANGAN gunakan `npm run dev`** untuk production!
-- **Selalu build** dengan `npm run build` terlebih dahulu
-- **Gunakan `dist` folder** sebagai root directory
-- **Backup** konfigurasi sebelum mengubah settings
+- **Selalu pastikan folder `dist` ada** setelah script berjalan.
+- **Backup** konfigurasi sebelum mengubah settings.
