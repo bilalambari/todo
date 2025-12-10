@@ -9,7 +9,7 @@ import { api } from '../../services/api';
 import { ArrowLeft, Save, Trash2, X, Calendar, User, Tag, Paperclip, CheckSquare, Clock, Play, Pause, RotateCcw, Volume2, VolumeX, MessageSquare, Send, Upload, FileText, Image, AlertTriangle } from 'lucide-react';
 
 const JFANS_CHECKLIST = [
-    "Cek Perhitungan Utilization rate harus Benar",
+    "Cek Perhitungan Utilization rate harus di cek dan Benar",
     "Pastikan History Masa sewa fasilitas telah di masukan pada JFANS",
     "Pastikan luasan SAMA bangunan existing fasilitas (renewal) Pada tabel JFANS",
     "Pastikan kandidat yg terdapat di PpT masuk semua k Survey report JFANS",
