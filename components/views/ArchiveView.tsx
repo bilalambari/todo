@@ -18,7 +18,7 @@ export const ArchiveView: React.FC = () => {
     );
 
     let archivedTasks = tasks.filter(t =>
-        t.status === TaskStatus.ARCHIVED || t.status === TaskStatus.DONE
+        t.status === TaskStatus.ARCHIVED
     );
 
     // Apply filters for tasks
