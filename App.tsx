@@ -20,6 +20,7 @@ import { MultiSelect } from './components/ui/MultiSelect';
 // --- Login Page ---
 const LoginPage = () => {
   const { login } = useAuth();
+  const { refreshData } = useStore();
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -29,6 +30,7 @@ const LoginPage = () => {
     e.preventDefault();
     const success = await login(email, password);
     if (success) {
+      await refreshData();
       navigate('/');
     } else {
       setError('Invalid credentials');

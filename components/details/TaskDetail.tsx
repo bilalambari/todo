@@ -382,26 +382,24 @@ export const TaskDetail: React.FC = () => {
                 <button onClick={() => navigate('/tasks')} className="flex items-center text-slate-500 hover:text-slate-800 transition-colors">
                     <ArrowLeft size={18} className="mr-2" /> Back
                 </button>
-                {!isArchived && (
-                    <div className="flex gap-3">
-                        {!isNew && (
-                            <button
-                                onClick={() => setIsDeleteModalOpen(true)}
-                                disabled={isSaving}
-                                className="px-4 py-2 text-red-600 bg-white border border-red-200 hover:bg-red-50 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors disabled:opacity-50"
-                            >
-                                <Trash2 size={16} /> Delete
-                            </button>
-                        )}
+                <div className="flex gap-3">
+                    {!isNew && (
                         <button
-                            onClick={handleSave}
+                            onClick={() => setIsDeleteModalOpen(true)}
                             disabled={isSaving}
-                            className="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-medium flex items-center gap-2 shadow-sm transition-colors disabled:opacity-50"
+                            className="px-4 py-2 text-red-600 bg-white border border-red-200 hover:bg-red-50 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors disabled:opacity-50"
                         >
-                            <Save size={16} /> {isSaving ? 'Saving...' : 'Save Task'}
+                            <Trash2 size={16} /> Delete
                         </button>
-                    </div>
-                )}
+                    )}
+                    <button
+                        onClick={handleSave}
+                        disabled={isSaving}
+                        className="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-medium flex items-center gap-2 shadow-sm transition-colors disabled:opacity-50"
+                    >
+                        <Save size={16} /> {isSaving ? 'Saving...' : 'Save Task'}
+                    </button>
+                </div>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
