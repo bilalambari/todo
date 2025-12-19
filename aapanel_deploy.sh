@@ -10,8 +10,10 @@ echo "🔧 Fixing git permissions..."
 git config --global --add safe.directory /www/wwwroot/list.ambaritek.com
 git config --global --add safe.directory "*"
 
-# 3. Pull perubahan terbaru
+# 3. Pull perubahan terbaru (Force Reset)
 echo "⬇️  Pulling latest changes..."
+git fetch --all
+git reset --hard origin/main
 git pull origin main
 
 # 4. Cari Node.js secara otomatis
