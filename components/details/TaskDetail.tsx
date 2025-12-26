@@ -24,7 +24,7 @@ const JFANS_CHECKLIST = [
     "Setiap relokasi Wajib memberikan Maps Jarak antar lokasi existing Dan yg baru",
     "Bila di butuhkan bisa dikasih data tambahan P&L dll",
     "Selama relokasi atau new fasilitas wajib ada proses negoisasi, walaupun harga sewa lebih rendah",
-    "Apakah PPT Sudah di Upload ke JFANS?(Centang bila Sudah upload di JFANS)"
+    "Apakah PPT Sudah di Upload di JFANS?(Centang bila Sudah upload di JFANS)"
 ];
 
 export const TaskDetail: React.FC = () => {
