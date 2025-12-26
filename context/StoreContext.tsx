@@ -10,24 +10,40 @@ interface AppData {
   notifications: Notification[];
 }
 
+export type FilterOperator = 'include' | 'exclude';
+
+export interface FilterState {
+  field: string;
+  value: any;
+  operator?: FilterOperator;
+}
+
 interface StoreContextType extends AppData {
   addProject: (project: Project) => Promise<void>;
   updateProject: (project: Project) => Promise<void>;
   deleteProject: (id: string) => Promise<void>;
-  
+
   addTask: (task: Task) => Promise<void>;
   updateTask: (task: Task) => Promise<void>;
   deleteTask: (id: string) => Promise<void>;
-  
+
   addMember: (member: TeamMember) => Promise<void>;
   updateMember: (member: TeamMember) => Promise<void>;
   deleteMember: (id: string) => Promise<void>;
-  
+
   addNotification: (notification: Notification) => Promise<void>;
   markNotificationRead: (id: string) => Promise<void>;
-  
+
   refreshData: () => Promise<void>;
   isLoading: boolean;
+
+  // UI Persistence State
+  taskViewMode: 'KANBAN' | 'GRID' | 'CALENDAR';
+  setTaskViewMode: (mode: 'KANBAN' | 'GRID' | 'CALENDAR') => void;
+  taskFilters: FilterState[];
+  setTaskFilters: (filters: FilterState[]) => void;
+  taskMatchAll: boolean;
+  setTaskMatchAll: (match: boolean) => void;
 }
 
 const StoreContext = createContext<StoreContextType | undefined>(undefined);
@@ -40,6 +56,13 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     notifications: []
   });
   const [isLoading, setIsLoading] = useState(true);
+
+  // UI State Persistence
+  const [taskViewMode, setTaskViewMode] = useState<'KANBAN' | 'GRID' | 'CALENDAR'>('KANBAN');
+  const [taskFilters, setTaskFilters] = useState<FilterState[]>([
+    { field: 'title', value: '', operator: 'include' }
+  ]);
+  const [taskMatchAll, setTaskMatchAll] = useState(true);
 
   const fetchData = async () => {
     setIsLoading(true);
@@ -60,11 +83,11 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         return [];
       };
 
-      setData({ 
-        members: getValue(membersRes, 'members'), 
-        projects: getValue(projectsRes, 'projects'), 
-        tasks: getValue(tasksRes, 'tasks'), 
-        notifications: getValue(notifRes, 'notifications') 
+      setData({
+        members: getValue(membersRes, 'members'),
+        projects: getValue(projectsRes, 'projects'),
+        tasks: getValue(tasksRes, 'tasks'),
+        notifications: getValue(notifRes, 'notifications')
       });
     } catch (error) {
       console.error("Critical error fetching data", JSON.stringify(error, null, 2));
@@ -244,7 +267,13 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         addNotification,
         markNotificationRead,
         refreshData,
-        isLoading
+        isLoading,
+        taskViewMode,
+        setTaskViewMode,
+        taskFilters,
+        setTaskFilters,
+        taskMatchAll,
+        setTaskMatchAll
       }}
     >
       {children}

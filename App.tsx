@@ -213,48 +213,59 @@ const ProjectsPage = () => {
   );
 };
 
+// --- Tasks Page with Persisted State ---
 const TasksPage = () => {
-  const { tasks, members, projects } = useStore();
-  const [view, setView] = useState<'KANBAN' | 'GRID' | 'CALENDAR'>('KANBAN');
+  const {
+    tasks, members, projects,
+    taskViewMode: view, setTaskViewMode: setView,
+    taskFilters: filters, setTaskFilters: setFilters,
+    taskMatchAll: matchAll, setTaskMatchAll: setMatchAll
+  } = useStore();
   const navigate = useNavigate();
-
-  // Advanced Filter State
   const [showFilters, setShowFilters] = useState(false);
-  const [matchAll, setMatchAll] = useState(true);
-  const [filters, setFilters] = useState<{ field: string; value: any }[]>([
-    { field: 'title', value: '' }
-  ]);
 
   const filteredTasks = useMemo(() => {
     if (filters.length === 0) return tasks;
     return tasks.filter(task => {
       const results = filters.map(f => {
-        if (!f.value) return true;
+        if (f.value === '' || f.value === null || (Array.isArray(f.value) && f.value.length === 0)) return true;
+
+        let match = false;
         switch (f.field) {
-          case 'title': return typeof f.value === 'string' && task.title.toLowerCase().includes(f.value.toLowerCase());
+          case 'title':
+            match = typeof f.value === 'string' && task.title.toLowerCase().includes(f.value.toLowerCase());
+            break;
           case 'status':
-            return Array.isArray(f.value) && f.value.length > 0
-              ? f.value.includes(task.status)
-              : true;
+            match = Array.isArray(f.value) ? f.value.includes(task.status) : task.status === f.value;
+            break;
           case 'priority':
-            return Array.isArray(f.value) && f.value.length > 0
-              ? f.value.includes(task.priority)
-              : true;
-          case 'project': return task.projectId === f.value;
-          case 'assignee': return task.assigneeIds && task.assigneeIds.includes(f.value);
-          default: return true;
+            match = Array.isArray(f.value) ? f.value.includes(task.priority) : task.priority === f.value;
+            break;
+          case 'project':
+            match = Array.isArray(f.value)
+              ? f.value.includes(task.projectId)
+              : task.projectId === f.value;
+            break;
+          case 'assignee':
+            match = task.assigneeIds && task.assigneeIds.includes(f.value);
+            break;
+          default:
+            match = true;
         }
+
+        return f.operator === 'exclude' ? !match : match;
       });
       return matchAll ? results.every(Boolean) : results.some(Boolean);
     });
   }, [tasks, filters, matchAll]);
 
-  const addFilter = () => setFilters([...filters, { field: 'title', value: '' }]);
+  const addFilter = () => setFilters([...filters, { field: 'title', value: '', operator: 'include' }]);
+
   const updateFilter = (index: number, key: string, val: any) => {
     const newFilters = [...filters];
-    // If changing field to/from status/priority, reset value
+
     if (key === 'field') {
-      if (['status', 'priority'].includes(val)) {
+      if (['status', 'priority', 'project'].includes(val)) {
         newFilters[index] = { ...newFilters[index], [key]: val, value: [] };
       } else {
         newFilters[index] = { ...newFilters[index], [key]: val, value: '' };
@@ -264,6 +275,7 @@ const TasksPage = () => {
     }
     setFilters(newFilters);
   };
+
   const removeFilter = (index: number) => setFilters(filters.filter((_, i) => i !== index));
 
   return (
@@ -295,7 +307,6 @@ const TasksPage = () => {
         </div>
       </div>
 
-      {/* Task Filters Panel */}
       {showFilters && (
         <div className="bg-white p-4 border-b border-slate-200 animate-in slide-in-from-top-2">
           <div className="flex items-center gap-4 mb-3">
@@ -308,6 +319,23 @@ const TasksPage = () => {
           <div className="space-y-3">
             {filters.map((filter, idx) => (
               <div key={idx} className="flex flex-wrap items-center gap-2">
+
+                {/* Include/Exclude Toggle */}
+                <div className="flex bg-slate-100 rounded-lg p-0.5 border border-slate-200">
+                  <button
+                    onClick={() => updateFilter(idx, 'operator', 'include')}
+                    className={`px-2 py-1 text-[10px] font-bold rounded uppercase ${!filter.operator || filter.operator === 'include' ? 'bg-white shadow text-indigo-600' : 'text-slate-400 hover:text-slate-600'}`}
+                  >
+                    Include
+                  </button>
+                  <button
+                    onClick={() => updateFilter(idx, 'operator', 'exclude')}
+                    className={`px-2 py-1 text-[10px] font-bold rounded uppercase ${filter.operator === 'exclude' ? 'bg-white shadow text-red-600' : 'text-slate-400 hover:text-slate-600'}`}
+                  >
+                    Exclude
+                  </button>
+                </div>
+
                 <select value={filter.field} onChange={(e) => updateFilter(idx, 'field', e.target.value)} className="text-sm bg-white border border-slate-300 rounded px-2 py-1.5 focus:ring-indigo-500">
                   <option value="title">Title</option>
                   <option value="status">Status</option>
@@ -315,7 +343,10 @@ const TasksPage = () => {
                   <option value="project">Project</option>
                   <option value="assignee">Assignee</option>
                 </select>
-                <span className="text-sm text-slate-500 px-2">is</span>
+
+                <span className="text-sm text-slate-500 px-1 italic">
+                  {filter.operator === 'exclude' ? 'is NOT' : 'is'}
+                </span>
 
                 {filter.field === 'title' ? (
                   <input type="text" value={filter.value} onChange={(e) => updateFilter(idx, 'value', e.target.value)} placeholder="Task title..." className="text-sm bg-white border border-slate-300 rounded px-2 py-1.5 focus:ring-indigo-500 flex-1" />
@@ -338,10 +369,14 @@ const TasksPage = () => {
                     />
                   </div>
                 ) : filter.field === 'project' ? (
-                  <select value={filter.value} onChange={(e) => updateFilter(idx, 'value', e.target.value)} className="text-sm bg-white border border-slate-300 rounded px-2 py-1.5 focus:ring-indigo-500 flex-1">
-                    <option value="">Any Project</option>
-                    {projects.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
-                  </select>
+                  <div className="flex-1 min-w-[200px]">
+                    <MultiSelect
+                      options={projects.map(p => ({ label: p.name, value: p.id }))}
+                      selected={Array.isArray(filter.value) ? filter.value : []}
+                      onChange={(selected) => updateFilter(idx, 'value', selected)}
+                      placeholder="Select Projects..."
+                    />
+                  </div>
                 ) : (
                   <select value={filter.value} onChange={(e) => updateFilter(idx, 'value', e.target.value)} className="text-sm bg-white border border-slate-300 rounded px-2 py-1.5 focus:ring-indigo-500 flex-1">
                     <option value="">Any Member</option>
